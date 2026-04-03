@@ -1,0 +1,54 @@
+{
+  "organizador_midias": {
+    "root_folder": "/Users/willianfonseca/Desktop/SUA_PASTA_AQUI",
+    "move_to_root": false,
+    "error_log": "errors.log",
+    "allowed_image_ext": [
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".gif",
+      ".bmp",
+      ".webp",
+      ".tiff",
+      ".tif"
+    ],
+    "allowed_video_ext": [
+      ".mp4",
+      ".mkv",
+      ".avi",
+      ".mov",
+      ".wmv",
+      ".flv",
+      ".webm",
+      ".mpeg",
+      ".mpg"
+    ]
+  },
+  "separador_de_videos": {
+    "root_folder": "/Users/willianfonseca/Desktop/SUA_PASTA_AQUI",
+    "move_to_root": true,
+    "error_log": "errors_separador.log",
+    "allowed_image_ext": [
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".gif",
+      ".bmp",
+      ".webp",
+      ".tiff",
+      ".tif"
+    ],
+    "allowed_video_ext": [
+      ".mp4",
+      ".mkv",
+      ".avi",
+      ".mov",
+      ".wmv",
+      ".flv",
+      ".webm",
+      ".mpeg",
+      ".mpg"
+    ]
+  }
+}
