@@ -1,3 +1,7 @@
+
 Pillow
 tqdm
 opencv-python
+rarfile
+py7zr
+colorama

@@ -1,6 +1,6 @@
 {
   "organizador_midias": {
-    "root_folder": "/Users/willianfonseca/Desktop/SUA_PASTA_AQUI",
+    "root_folder": "/Volumes/WILLIAN/DB_VIDEOS/AI",
     "move_to_root": false,
     "error_log": "errors.log",
     "allowed_image_ext": [
@@ -26,7 +26,7 @@
     ]
   },
   "separador_de_videos": {
-    "root_folder": "/Users/willianfonseca/Desktop/SUA_PASTA_AQUI",
+    "root_folder": "/Volumes/WILLIAN/DB_VIDEOS/DIY",
     "move_to_root": true,
     "error_log": "errors_separador.log",
     "allowed_image_ext": [
@@ -50,5 +50,9 @@
       ".mpeg",
       ".mpg"
     ]
+  },
+  "extrator_arquivos": {
+    "root_folder": "/Users/willianfonseca/Desktop/BOTTLES",
+    "error_log": "errors_extrator.log"
   }
 }
