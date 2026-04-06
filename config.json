@@ -1,29 +1,9 @@
 {
-  "organizador_midias": {
-    "root_folder": "/Volumes/WILLIAN/DB_VIDEOS/AI",
-    "move_to_root": false,
+    "organizador_midias": {
+    "root_folder": "/Volumes/WILLIAN/DB_VIDEOS/FUTEBOL",
     "error_log": "errors.log",
-    "allowed_image_ext": [
-      ".jpg",
-      ".jpeg",
-      ".png",
-      ".gif",
-      ".bmp",
-      ".webp",
-      ".tiff",
-      ".tif"
-    ],
-    "allowed_video_ext": [
-      ".mp4",
-      ".mkv",
-      ".avi",
-      ".mov",
-      ".wmv",
-      ".flv",
-      ".webm",
-      ".mpeg",
-      ".mpg"
-    ]
+    "allowed_image_ext": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".tif"],
+    "allowed_video_ext": [".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".webm", ".mpeg", ".mpg"]
   },
   "separador_de_videos": {
     "root_folder": "/Volumes/WILLIAN/DB_VIDEOS/DIY",

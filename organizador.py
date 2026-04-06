@@ -1,8 +1,8 @@
-import hashlib
 import json
-import os
-from datetime import datetime
+import shutil
 from pathlib import Path
+import hashlib
+from datetime import datetime
 
 from PIL import Image
 from tqdm import tqdm
@@ -15,199 +15,226 @@ except ImportError:
 
 CONFIG_FILE = "config.json"
 APP_SECTION = "organizador_midias"
+OUTPUT_DIR_NAME = "VIDEOS_ORGANIZADOS"
 
 
-def load_config():
-    config_path = Path(CONFIG_FILE)
+def carregar_config():
+    caminho_config = Path(CONFIG_FILE)
 
-    default_config = {
-        APP_SECTION: {
-            "root_folder": "/Users/willianfonseca/Desktop/SUA_PASTA_AQUI",
-            "move_to_root": False,
-            "error_log": "errors.log",
-            "allowed_image_ext": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".tif"],
-            "allowed_video_ext": [".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".webm", ".mpeg", ".mpg"]
+    if not caminho_config.exists():
+        default_config = {
+            APP_SECTION: {
+                "root_folder": "/caminho/para/pasta/raiz",
+                "error_log": "erros.log",
+                "allowed_image_ext": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".tif"],
+                "allowed_video_ext": [".mp4", ".avi", ".mov", ".mkv", ".wmv", ".flv", ".webm", ".mpeg", ".mpg"]
+            }
         }
-    }
 
-    if not config_path.exists():
-        with open(config_path, "w", encoding="utf-8") as f:
+        with open(caminho_config, "w", encoding="utf-8") as f:
             json.dump(default_config, f, indent=4, ensure_ascii=False)
-        print(f"Arquivo {CONFIG_FILE} criado. Edite o caminho e execute novamente.")
+
+        print(f"Arquivo {CONFIG_FILE} criado. Ajuste os caminhos e execute novamente.")
         return None
 
+    with open(caminho_config, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def normalizar_texto(texto):
+    invalidos = r'<>:"/\|?*'
+    for ch in invalidos:
+        texto = texto.replace(ch, "_")
+    return texto.strip().replace(" ", "_").upper()
+
+
+def eh_arquivo_auxiliar_mac(path_obj):
+    nome = path_obj.name
+    return (
+        nome.startswith("._") or
+        nome == ".DS_Store" or
+        nome.startswith(".")
+    )
+
+
+def eh_arquivo_media(caminho_arquivo, config_app):
+    if eh_arquivo_auxiliar_mac(caminho_arquivo):
+        return False
+
+    extensao = caminho_arquivo.suffix.lower()
+    return (
+        extensao in config_app["allowed_image_ext"] or
+        extensao in config_app["allowed_video_ext"]
+    )
+
+
+def coletar_arquivos_midias(root_folder, config_app):
+    arquivos = []
+    for caminho_arquivo in root_folder.rglob("*"):
+        if caminho_arquivo.is_file() and eh_arquivo_media(caminho_arquivo, config_app):
+            arquivos.append(caminho_arquivo)
+    return arquivos
+
+
+def obter_resolucao_imagem(caminho_arquivo):
     try:
-        with open(config_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"Erro ao ler {CONFIG_FILE}: {e}")
-        return None
+        with Image.open(caminho_arquivo) as img:
+            return f"{img.width}x{img.height}".upper()
+    except Exception:
+        return "IMAGE_UNKNOWN"
 
 
-def normalize_text(text):
-    invalid_chars = r'<>:"/\|?*'
-    for ch in invalid_chars:
-        text = text.replace(ch, "_")
-    return text.strip().replace(" ", "_").upper()
-
-
-def is_media_file(file_path, app_config):
-    ext = file_path.suffix.lower()
-    return ext in app_config["allowed_image_ext"] or ext in app_config["allowed_video_ext"]
-
-
-def get_resolution(file_path):
-    ext = file_path.suffix.lower()
-
+def obter_resolucao_video(caminho_arquivo):
     try:
-        if ext in [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".tif"]:
-            with Image.open(file_path) as img:
-                width, height = img.size
-                return f"{width}x{height}".upper()
-
-        if ext in [".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".webm", ".mpeg", ".mpg"]:
-            if cv2 is None:
-                return "VIDEO_UNKNOWN"
-
-            cap = cv2.VideoCapture(str(file_path))
-            width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-            height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-            cap.release()
-
-            if width > 0 and height > 0:
-                return f"{width}x{height}".upper()
+        if cv2 is None:
             return "VIDEO_UNKNOWN"
 
+        cap = cv2.VideoCapture(str(caminho_arquivo))
+        if not cap.isOpened():
+            cap.release()
+            return "VIDEO_UNKNOWN"
+
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        cap.release()
+
+        if width > 0 and height > 0:
+            return f"{width}x{height}".upper()
+
+        return "VIDEO_UNKNOWN"
     except Exception:
-        return "UNKNOWN"
-
-    return "UNKNOWN"
+        return "VIDEO_UNKNOWN"
 
 
-def get_download_date(file_path):
+def calcular_hash(caminho_arquivo):
     try:
-        stat = file_path.stat()
-        ts = getattr(stat, "st_birthtime", stat.st_ctime)
-        return datetime.fromtimestamp(ts).strftime("%Y%m%d")
-    except Exception:
-        return datetime.now().strftime("%Y%m%d")
-
-
-def get_unique_hash(file_path):
-    try:
-        hasher = hashlib.sha256()
-        with open(file_path, "rb") as f:
-            for chunk in iter(lambda: f.read(1024 * 1024), b""):
-                hasher.update(chunk)
-        return hasher.hexdigest()[:15].upper()
+        hash_obj = hashlib.sha256()
+        with open(caminho_arquivo, "rb") as f:
+            while chunk := f.read(8192):
+                hash_obj.update(chunk)
+        return hash_obj.hexdigest()[:15].upper()
     except Exception:
         return "HASHERROR000000"
 
 
-def get_all_media_files(root_path, app_config):
-    media_files = []
-    for path in root_path.rglob("*"):
-        if path.is_file() and is_media_file(path, app_config):
-            media_files.append(path)
-    return media_files
+def obter_data(caminho_arquivo):
+    try:
+        timestamp = caminho_arquivo.stat().st_mtime
+        return datetime.fromtimestamp(timestamp).strftime("%Y%m%d")
+    except Exception:
+        return datetime.now().strftime("%Y%m%d")
 
 
-def build_new_name(categoria, subcategoria, resolucao, data_download, numero, hash_unico, ext):
-    return (
-        f"{normalize_text(categoria)}_"
-        f"{normalize_text(subcategoria)}_"
-        f"{normalize_text(resolucao)}_"
-        f"{data_download}_"
-        f"{numero}_"
-        f"{hash_unico}"
-        f"{ext.lower()}"
-    )
+def obter_categoria_subcategoria(caminho_arquivo, root_folder):
+    categoria = root_folder.name.upper()
+    rel = caminho_arquivo.relative_to(root_folder)
+
+    if len(rel.parts) > 1:
+        subcategoria = rel.parts[0].upper()
+    else:
+        subcategoria = categoria
+
+    return categoria, subcategoria
 
 
-def safe_move_or_rename(src, dst):
-    if not dst.exists():
-        src.rename(dst)
-        return dst
+def gerar_nome_base(categoria, subcategoria, resolucao, data, numero, hash_str):
+    return f"{categoria}_{subcategoria}_{resolucao}_{data}_{numero}_{hash_str}"
 
-    base = dst.stem
-    ext = dst.suffix
-    counter = 1
 
+def resolver_duplicado(caminho_saida, nome_base, extensao):
+    candidato = caminho_saida / f"{nome_base}{extensao}"
+    if not candidato.exists():
+        return candidato
+
+    contador = 1
     while True:
-        candidate = dst.parent / f"{base}_{counter}{ext}"
-        if not candidate.exists():
-            src.rename(candidate)
-            return candidate
-        counter += 1
+        nome_dup = f"{nome_base}_DUP{contador:03d}{extensao}"
+        candidato = caminho_saida / nome_dup
+        if not candidato.exists():
+            return candidato
+        contador += 1
 
 
-def log_error(error_log_path, file_path, error_message):
+def registrar_erro(caminho_log, caminho_arquivo, mensagem):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open(error_log_path, "a", encoding="utf-8") as log_file:
-        log_file.write(f"[{timestamp}] {file_path} -> {error_message}\n")
+    with open(caminho_log, "a", encoding="utf-8") as f:
+        f.write(f"[{timestamp}] {caminho_arquivo} -> {mensagem}\n")
+
+
+def mover_arquivo(caminho_origem, caminho_destino):
+    caminho_destino.parent.mkdir(parents=True, exist_ok=True)
+
+    try:
+        caminho_origem.rename(caminho_destino)
+    except OSError:
+        shutil.move(str(caminho_origem), str(caminho_destino))
+
+
+def processar_arquivo(caminho_arquivo, config_app, caminho_saida, numero, total_arquivos):
+    root_folder = Path(config_app["root_folder"])
+
+    categoria, subcategoria = obter_categoria_subcategoria(caminho_arquivo, root_folder)
+    data = obter_data(caminho_arquivo)
+    hash_str = calcular_hash(caminho_arquivo)
+    extensao = caminho_arquivo.suffix.lower()
+
+    if extensao in config_app["allowed_image_ext"]:
+        resolucao = obter_resolucao_imagem(caminho_arquivo)
+    elif extensao in config_app["allowed_video_ext"]:
+        resolucao = obter_resolucao_video(caminho_arquivo)
+    else:
+        resolucao = "UNKNOWN"
+
+    numero_str = str(numero).zfill(len(str(total_arquivos)))
+    nome_base = gerar_nome_base(categoria, subcategoria, resolucao, data, numero_str, hash_str)
+    caminho_final = resolver_duplicado(caminho_saida, nome_base, extensao)
+
+    mover_arquivo(caminho_arquivo, caminho_final)
 
 
 def run_organizador():
-    config = load_config()
+    config = carregar_config()
     if not config:
         return
 
-    app_config = config.get(APP_SECTION, {})
+    config_app = config.get(APP_SECTION, {})
 
-    root_folder = app_config.get("root_folder")
-    move_to_root = bool(app_config.get("move_to_root", False))
-    error_log = app_config.get("error_log", "errors.log")
+    root_folder = config_app.get("root_folder")
+    error_log = config_app.get("error_log", "erros.log")
 
     if not root_folder:
-        print(f"O campo 'root_folder' não foi definido em '{APP_SECTION}' no config.json.")
+        print(f"O campo 'root_folder' não foi definido em '{APP_SECTION}'.")
         return
 
     root_path = Path(root_folder).expanduser()
 
     if not root_path.exists() or not root_path.is_dir():
-        print(f"ERRO: a pasta informada não existe ou não é válida: {root_folder}")
+        print(f"ERRO: a pasta raiz não existe ou não é válida: {root_folder}")
         return
 
-    categoria = root_path.name
-    media_files = get_all_media_files(root_path, app_config)
-    total_files = len(media_files)
+    caminho_saida = root_path / OUTPUT_DIR_NAME
+    caminho_saida.mkdir(parents=True, exist_ok=True)
 
-    if total_files == 0:
+    arquivos = coletar_arquivos_midias(root_path, config_app)
+    total_arquivos = len(arquivos)
+
+    if total_arquivos == 0:
         print("Nenhum arquivo de imagem ou vídeo encontrado.")
         return
 
-    largura_numero = len(str(total_files))
-
-    print(f"Total de arquivos encontrados: {total_files}")
+    print(f"Total de arquivos encontrados: {total_arquivos}")
     print(f"Pasta raiz: {root_path}")
+    print(f"Pasta de saída: {caminho_saida}")
     print("Iniciando processamento...\n")
 
-    for index, file_path in enumerate(
-        tqdm(media_files, total=total_files, desc="Processando arquivos", unit="arquivo"),
+    for numero, caminho_arquivo in enumerate(
+        tqdm(arquivos, total=total_arquivos, desc="Organizando mídias", unit="arquivo"),
         start=1
     ):
         try:
-            subcategoria = file_path.parent.name if file_path.parent != root_path else "ROOT"
-            resolucao = get_resolution(file_path)
-            data_download = get_download_date(file_path)
-            hash_unico = get_unique_hash(file_path)
-            numero = str(index).zfill(largura_numero)
-
-            novo_nome = build_new_name(
-                categoria=categoria,
-                subcategoria=subcategoria,
-                resolucao=resolucao,
-                data_download=data_download,
-                numero=numero,
-                hash_unico=hash_unico,
-                ext=file_path.suffix
-            )
-
-            destino = root_path / novo_nome if move_to_root else file_path.parent / novo_nome
-            safe_move_or_rename(file_path, destino)
-
+            processar_arquivo(caminho_arquivo, config_app, caminho_saida, numero, total_arquivos)
         except Exception as e:
-            log_error(error_log, file_path, str(e))
-            print(f"\nErro ao processar {file_path}: {e}")
+            registrar_erro(error_log, caminho_arquivo, str(e))
+            print(f"\nErro ao processar {caminho_arquivo}: {e}")
 
     print("\nConcluído com sucesso.")
