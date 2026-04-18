@@ -1,5 +1,4 @@
 import json
-import shutil
 from pathlib import Path
 import hashlib
 from datetime import datetime
@@ -15,7 +14,6 @@ except ImportError:
 
 CONFIG_FILE = "config.json"
 APP_SECTION = "organizador_midias"
-OUTPUT_DIR_NAME = "VIDEOS_ORGANIZADOS"
 
 
 def carregar_config():
@@ -141,15 +139,15 @@ def gerar_nome_base(categoria, subcategoria, resolucao, data, numero, hash_str):
     return f"{categoria}_{subcategoria}_{resolucao}_{data}_{numero}_{hash_str}"
 
 
-def resolver_duplicado(caminho_saida, nome_base, extensao):
-    candidato = caminho_saida / f"{nome_base}{extensao}"
+def resolver_duplicado(pasta_destino, nome_base, extensao):
+    candidato = pasta_destino / f"{nome_base}{extensao}"
     if not candidato.exists():
         return candidato
 
     contador = 1
     while True:
         nome_dup = f"{nome_base}_DUP{contador:03d}{extensao}"
-        candidato = caminho_saida / nome_dup
+        candidato = pasta_destino / nome_dup
         if not candidato.exists():
             return candidato
         contador += 1
@@ -161,16 +159,12 @@ def registrar_erro(caminho_log, caminho_arquivo, mensagem):
         f.write(f"[{timestamp}] {caminho_arquivo} -> {mensagem}\n")
 
 
-def mover_arquivo(caminho_origem, caminho_destino):
+def renomear_no_mesmo_local(caminho_origem, caminho_destino):
     caminho_destino.parent.mkdir(parents=True, exist_ok=True)
-
-    try:
-        caminho_origem.rename(caminho_destino)
-    except OSError:
-        shutil.move(str(caminho_origem), str(caminho_destino))
+    caminho_origem.rename(caminho_destino)
 
 
-def processar_arquivo(caminho_arquivo, config_app, caminho_saida, numero, total_arquivos):
+def processar_arquivo(caminho_arquivo, config_app, numero, total_arquivos):
     root_folder = Path(config_app["root_folder"])
 
     categoria, subcategoria = obter_categoria_subcategoria(caminho_arquivo, root_folder)
@@ -187,9 +181,11 @@ def processar_arquivo(caminho_arquivo, config_app, caminho_saida, numero, total_
 
     numero_str = str(numero).zfill(len(str(total_arquivos)))
     nome_base = gerar_nome_base(categoria, subcategoria, resolucao, data, numero_str, hash_str)
-    caminho_final = resolver_duplicado(caminho_saida, nome_base, extensao)
 
-    mover_arquivo(caminho_arquivo, caminho_final)
+    pasta_destino = caminho_arquivo.parent
+    caminho_final = resolver_duplicado(pasta_destino, nome_base, extensao)
+
+    renomear_no_mesmo_local(caminho_arquivo, caminho_final)
 
 
 def run_organizador():
@@ -212,9 +208,6 @@ def run_organizador():
         print(f"ERRO: a pasta raiz não existe ou não é válida: {root_folder}")
         return
 
-    caminho_saida = root_path / OUTPUT_DIR_NAME
-    caminho_saida.mkdir(parents=True, exist_ok=True)
-
     arquivos = coletar_arquivos_midias(root_path, config_app)
     total_arquivos = len(arquivos)
 
@@ -224,7 +217,6 @@ def run_organizador():
 
     print(f"Total de arquivos encontrados: {total_arquivos}")
     print(f"Pasta raiz: {root_path}")
-    print(f"Pasta de saída: {caminho_saida}")
     print("Iniciando processamento...\n")
 
     for numero, caminho_arquivo in enumerate(
@@ -232,7 +224,7 @@ def run_organizador():
         start=1
     ):
         try:
-            processar_arquivo(caminho_arquivo, config_app, caminho_saida, numero, total_arquivos)
+            processar_arquivo(caminho_arquivo, config_app, numero, total_arquivos)
         except Exception as e:
             registrar_erro(error_log, caminho_arquivo, str(e))
             print(f"\nErro ao processar {caminho_arquivo}: {e}")
