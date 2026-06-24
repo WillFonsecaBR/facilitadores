@@ -1,38 +1,34 @@
 {
     "organizador_midias": {
-    "root_folder": "/Volumes/VIDEOS_DB/SURVIVAL_TIPS",
+    "root_folder": "/Volumes/WILLIAN/RELATIONSHIP_MEMES",
     "error_log": "errors.log",
     "allowed_image_ext": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".tif"],
     "allowed_video_ext": [".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".webm", ".mpeg", ".mpg"]
   },
   "separador_de_videos": {
-    "root_folder": "/Volumes/VIDEOS_DB/18+",
+    "root_folder": "/Volumes/WILLIAN/RELATIONSHIP_MEMES",
     "move_to_root": true,
     "error_log": "errors_separador.log",
-    "allowed_image_ext": [
-      ".jpg",
-      ".jpeg",
-      ".png",
-      ".gif",
-      ".bmp",
-      ".webp",
-      ".tiff",
-      ".tif"
-    ],
-    "allowed_video_ext": [
-      ".mp4",
-      ".mkv",
-      ".avi",
-      ".mov",
-      ".wmv",
-      ".flv",
-      ".webm",
-      ".mpeg",
-      ".mpg"
-    ]
+    "allowed_image_ext": [ ".jpg", ".jpeg",".png", ".gif", ".bmp", ".webp", ".tiff", ".tif"],
+    "allowed_video_ext": [".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".webm", ".mpeg", ".mpg"]
   },
   "extrator_arquivos": {
     "root_folder": "/Users/willianfonseca/Desktop/BOTTLES",
     "error_log": "errors_extrator.log"
+  },
+    "selecionador_imagens": {
+    "root_folder": "/Volumes/WILLIAN/1_DOWNLOADER/SATISFACTORY_VIDEOS",
+    "output_folder_name": "IMAGENS_SEPARADAS",
+    "error_log": "log_selecionador.txt",
+    "allowed_image_ext": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tiff", ".tif"]
+  },
+    "criador_pastas": {
+    "root_folder": "/Volumes/SSD_1TB/DOWNLOADER_2"
+  }, 
+    "organizador_videos_edicao": {
+    "root_folder": "/Users/willianfonseca/Desktop/SEM_MD",
+    "quantidade_por_pasta": 50,
+    "extensoes": [".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".webm", ".mpeg", ".mpg"]
   }
+  
 }
