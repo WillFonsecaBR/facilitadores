@@ -29,6 +29,11 @@
     "root_folder": "/Users/willianfonseca/Desktop/SEM_MD",
     "quantidade_por_pasta": 50,
     "extensoes": [".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".webm", ".mpeg", ".mpg"]
+  },
+    "criador_pastas": {
+    "root_folder": "/Volumes/"
+  }, 
+    "movendo_videos_marca_dagua": {
+    "root_folder": "/Users/willianfonseca/Desktop/FUNNY"
   }
-  
 }
