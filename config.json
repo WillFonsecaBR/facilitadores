@@ -13,7 +13,7 @@
     "allowed_video_ext": [".mp4", ".mkv", ".avi", ".mov", ".wmv", ".flv", ".webm", ".mpeg", ".mpg"]
   },
   "extrator_arquivos": {
-    "root_folder": "/Users/willianfonseca/Desktop/BOTTLES",
+    "root_folder": "/Volumes/SSD_1TB/DOWNLOADER_1/MEMES/00 - ZIPADOS",
     "error_log": "errors_extrator.log"
   },
     "selecionador_imagens": {
