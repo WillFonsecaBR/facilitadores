@@ -1,12 +1,49 @@
+# ==============================================================================
+# FUNCIONAMENTO DO SCRIPT
+# ------------------------------------------------------------------------------
+# - Lê o arquivo config.json localizado ao lado deste script.
+# - Obtém a pasta raiz por meio da chave movendo_videos_marca_dagua.root_folder.
+# - Define as pastas logs e ERROR ao lado do script para registro de logs e erros.
+# - Percorre as subpastas de primeiro nível da pasta raiz.
+# - Procura recursivamente, dentro de cada subpasta, por pastas chamadas "00 - COM MD".
+# - Move os vídeos encontrados dessas pastas para uma pasta "00 - COM MD" centralizada
+#   na raiz, agrupando os arquivos pelo nome da pasta de topo correspondente.
+# - Evita sobrescrever arquivos existentes gerando nomes únicos quando necessário.
+# - Remove as pastas de origem que ficarem vazias após a movimentação dos vídeos.
+# - Registra logs na pasta logs e erros na pasta ERROR.
+# ==============================================================================
+
 import os
 import json
 import shutil
 from pathlib import Path
 from tqdm import tqdm
 
+BASE_DIR = Path(__file__).resolve().parent
+LOGS_DIR = BASE_DIR / 'logs'
+ERROR_DIR = BASE_DIR / 'ERROR'
+
+def salvar_log(mensagem):
+    """Salva uma mensagem de log em arquivo na pasta logs."""
+    try:
+        LOGS_DIR.mkdir(parents=True, exist_ok=True)
+        with open(LOGS_DIR / 'log.txt', 'a', encoding='utf-8') as f:
+            f.write(mensagem + '\n')
+    except Exception:
+        pass
+
+def salvar_erro(mensagem):
+    """Salva uma mensagem de erro em arquivo na pasta ERROR."""
+    try:
+        ERROR_DIR.mkdir(parents=True, exist_ok=True)
+        with open(ERROR_DIR / 'erro.txt', 'a', encoding='utf-8') as f:
+            f.write(mensagem + '\n')
+    except Exception:
+        pass
+
 def carregar_configuracao():
     """Carrega as configurações do arquivo config.json."""
-    config_path = Path('config.json')
+    config_path = BASE_DIR / 'config.json'
     if not config_path.exists():
         raise FileNotFoundError("Arquivo 'config.json' não encontrado.")
     
@@ -43,6 +80,7 @@ def run_movendo_videos_marca_dagua():
 
         if not root_path.exists() or not root_path.is_dir():
             print(f"Erro: O diretório raiz '{root_path}' não existe.")
+            salvar_erro(f"Erro: O diretório raiz '{root_path}' não existe.")
             return
 
         # Pasta principal de destino na raiz
@@ -56,6 +94,7 @@ def run_movendo_videos_marca_dagua():
 
         # FASE 1: Coleta de arquivos e pastas
         print("\nColetando informações dos arquivos...")
+        salvar_log("Coletando informações dos arquivos...")
         tarefas_movimentacao = []
         pastas_para_limpar = set()
 
@@ -83,6 +122,7 @@ def run_movendo_videos_marca_dagua():
 
         if not tarefas_movimentacao:
             print("Nenhum vídeo encontrado para mover.")
+            salvar_log("Nenhum vídeo encontrado para mover.")
             return
 
         # FASE 2: Movimentação com barra de progresso
@@ -102,6 +142,7 @@ def run_movendo_videos_marca_dagua():
                     videos_movidos += 1
                 except Exception as e:
                     print(f"\nErro ao mover {origem.name}: {e}")
+                    salvar_erro(f"Erro ao mover {origem.name}: {e}")
                 
                 pbar.update(1)
 
@@ -123,9 +164,11 @@ def run_movendo_videos_marca_dagua():
         print(f"Vídeos movidos: {videos_movidos}")
         print(f"Pastas '{nome_pasta_md}' removidas (vazias): {pastas_removidas}")
         print("="*30 + "\n")
+        salvar_log(f"RESUMO DO PROCESSO\nVídeos movidos: {videos_movidos}\nPastas '{nome_pasta_md}' removidas (vazias): {pastas_removidas}")
 
     except Exception as e:
         print(f"Erro inesperado: {e}")
+        salvar_erro(f"Erro inesperado: {e}")
 
 if __name__ == "__main__":
     run_movendo_videos_marca_dagua()

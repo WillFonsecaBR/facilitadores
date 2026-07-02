@@ -1,13 +1,27 @@
+# =============================================================================
+# Funcionamento geral do script:
+# Este script lê configurações de um config.json localizado na raiz do repositório.
+# Localiza nichos (subpastas) dentro de uma pasta raiz configurada, move imagens
+# com extensões permitidas para uma estrutura de pastas separada por nicho dentro
+# de uma pasta de saída, conta os vídeos restantes por nicho, registra logs gerais
+# na pasta 'logs' e logs de erro na pasta 'error', e imprime um relatório por nicho
+# ao final do processamento.
+# =============================================================================
+
 import json
 import os
 import shutil
 from tqdm import tqdm
 import logging
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT = os.path.dirname(BASE_DIR)
+CONFIG_PATH = os.path.join(REPO_ROOT, 'config.json')
+
 def run_selecionador():
     # 1. Carregar configurações dinamicamente
     try:
-        with open('config.json', 'r', encoding='utf-8') as f:
+        with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
             config_full = json.load(f)
     except Exception as e:
         print(f"Erro ao ler config.json: {e}")
@@ -23,7 +37,6 @@ def run_selecionador():
     log_file = cfg.get('error_log', 'log_selecionador.txt')
     allowed_img_ext = set(ext.lower() for ext in cfg.get('allowed_image_ext', []))
 
-    # Buscar extensões de vídeo das outras seções para a análise final
     allowed_video_ext = set()
     for section in ['organizador_midias', 'separador_de_videos']:
         if section in config_full:
@@ -33,8 +46,20 @@ def run_selecionador():
         print(f"Erro: Caminho raiz não encontrado: {root}")
         return
 
-    logging.basicConfig(filename=log_file, level=logging.INFO, 
+    logs_dir = os.path.join(REPO_ROOT, 'logs')
+    os.makedirs(logs_dir, exist_ok=True)
+    log_file_path = os.path.join(logs_dir, log_file)
+
+    logging.basicConfig(filename=log_file_path, level=logging.INFO, 
                         format='%(asctime)s - %(message)s', encoding='utf-8')
+
+    error_dir = os.path.join(REPO_ROOT, 'error')
+    os.makedirs(error_dir, exist_ok=True)
+    error_log_path = os.path.join(error_dir, 'erros_selecionador.txt')
+    error_handler = logging.FileHandler(error_log_path, encoding='utf-8')
+    error_handler.setLevel(logging.ERROR)
+    error_handler.setFormatter(logging.Formatter('%(asctime)s - %(message)s'))
+    logging.getLogger().addHandler(error_handler)
 
     dest_base = os.path.join(root, output_folder_name)
     os.makedirs(dest_base, exist_ok=True)
@@ -49,7 +74,6 @@ def run_selecionador():
         nicho_dest_dir = os.path.join(dest_base, nicho)
         os.makedirs(nicho_dest_dir, exist_ok=True)
 
-        # Mapear imagens do nicho
         imagens = []
         for r, d, f in os.walk(nicho_path):
             if output_folder_name in r: continue
@@ -57,7 +81,6 @@ def run_selecionador():
                 if any(file.lower().endswith(ext) for ext in allowed_img_ext):
                     imagens.append(os.path.join(r, file))
 
-        # --- MOVIMENTAÇÃO ---
         img_movidas_nicho = 0
         if imagens:
             pbar = tqdm(imagens, desc=f"Nicho: {nicho}", unit="img")
@@ -78,7 +101,6 @@ def run_selecionador():
                 except Exception as e:
                     logging.error(f"Erro ao mover {filename} em {nicho}: {e}")
 
-        # --- ANÁLISE DE VÍDEOS ---
         video_count = 0
         for r, d, f in os.walk(nicho_path):
             if output_folder_name in r: continue
@@ -86,7 +108,6 @@ def run_selecionador():
                 if any(file.lower().endswith(ext) for ext in allowed_video_ext):
                     video_count += 1
         
-        # RELATÓRIO POR NICHO
         resultado = f"Nicho [{nicho}]: {img_movidas_nicho} imagens movidas | {video_count} vídeos restantes"
         print(resultado)
         logging.info(resultado)

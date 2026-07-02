@@ -1,12 +1,12 @@
 import json
 import os
-from organizador import run_organizador
-from separador_de_videos import separar_videos
-from selecionador import run_selecionador
-from criador_pastas import run_criador_pastas
-from organizador_videos_edicao import run_organizador_videos
-from movendo_videos_marca_dagua import run_movendo_videos_marca_dagua
-from extrator_arquivos import main as run_extrator
+from src.organizador import run_organizador
+from src.separador_de_videos import separar_videos
+from src.selecionador import run_selecionador
+from src.criador_pastas import run_criador_pastas
+from src.organizador_videos_edicao import run_organizador_videos
+from src.movendo_videos_marca_dagua import run_movendo_videos_marca_dagua
+from src.extrator_arquivos import main as run_extrator
 
 def carregar_config():
     with open('config.json', 'r', encoding='utf-8') as f:

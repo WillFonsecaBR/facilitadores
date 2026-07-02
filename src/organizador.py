@@ -1,3 +1,16 @@
+# Este script organiza arquivos de midia (imagens e videos) localizados em uma pasta raiz configurada.
+# Ele le as configuracoes a partir do arquivo config.json, como a pasta raiz, extensoes permitidas e o arquivo de log de erros.
+# Apos carregar as configuracoes, percorre recursivamente a pasta raiz informada, identificando imagens e videos validos com base nas extensoes permitidas.
+# Para cada arquivo valido, o script renomeia o arquivo no mesmo local (sem move-lo de pasta), gerando um novo nome que inclui:
+#   - categoria (nome da pasta raiz)
+#   - subcategoria (primeiro nivel de subpasta relativo a raiz)
+#   - resolucao (dimensoes da imagem ou do video)
+#   - data (baseada na data de modificacao do arquivo)
+#   - numero sequencial (indice do arquivo na lista processada)
+#   - hash (identificador unico calculado a partir do conteudo do arquivo)
+# Durante a execucao, o script registra logs de acompanhamento na pasta logs e registra erros encontrados na pasta ERROR.
+# Arquivos auxiliares do macOS (como .DS_Store e arquivos iniciados com ._) sao ignorados durante o processamento.
+
 import json
 from pathlib import Path
 import hashlib
@@ -12,7 +25,8 @@ except ImportError:
     cv2 = None
 
 
-CONFIG_FILE = "config.json"
+BASE_DIR = Path(__file__).resolve().parent
+CONFIG_FILE = BASE_DIR / "config.json"
 APP_SECTION = "organizador_midias"
 
 
@@ -40,7 +54,7 @@ def carregar_config():
 
 
 def normalizar_texto(texto):
-    invalidos = r'<>:"/\|?*'
+    invalidos = r'<>:"/\\|?*'
     for ch in invalidos:
         texto = texto.replace(ch, "_")
     return texto.strip().replace(" ", "_").upper()
@@ -154,9 +168,19 @@ def resolver_duplicado(pasta_destino, nome_base, extensao):
 
 
 def registrar_erro(caminho_log, caminho_arquivo, mensagem):
+    caminho_log = Path(caminho_log)
+    caminho_log.parent.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(caminho_log, "a", encoding="utf-8") as f:
         f.write(f"[{timestamp}] {caminho_arquivo} -> {mensagem}\n")
+
+
+def registrar_log(mensagem):
+    caminho_log = BASE_DIR / "logs" / "app.log"
+    caminho_log.parent.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(caminho_log, "a", encoding="utf-8") as f:
+        f.write(f"[{timestamp}] {mensagem}\n")
 
 
 def renomear_no_mesmo_local(caminho_origem, caminho_destino):
@@ -197,6 +221,7 @@ def run_organizador():
 
     root_folder = config_app.get("root_folder")
     error_log = config_app.get("error_log", "erros.log")
+    error_log = BASE_DIR / "ERROR" / Path(error_log).name
 
     if not root_folder:
         print(f"O campo 'root_folder' não foi definido em '{APP_SECTION}'.")
@@ -219,6 +244,10 @@ def run_organizador():
     print(f"Pasta raiz: {root_path}")
     print("Iniciando processamento...\n")
 
+    registrar_log(f"Total de arquivos encontrados: {total_arquivos}")
+    registrar_log(f"Pasta raiz: {root_path}")
+    registrar_log("Iniciando processamento...")
+
     for numero, caminho_arquivo in enumerate(
         tqdm(arquivos, total=total_arquivos, desc="Organizando mídias", unit="arquivo"),
         start=1
@@ -228,5 +257,7 @@ def run_organizador():
         except Exception as e:
             registrar_erro(error_log, caminho_arquivo, str(e))
             print(f"\nErro ao processar {caminho_arquivo}: {e}")
+            registrar_log(f"Erro ao processar {caminho_arquivo}: {e}")
 
     print("\nConcluído com sucesso.")
+    registrar_log("Concluído com sucesso.")

@@ -1,11 +1,18 @@
+# Este script lê configurações de um config.json na raiz do repositório, varre subpastas dentro de uma pasta raiz configurada procurando arquivos de imagem e vídeo com extensões permitidas, move esses arquivos para a própria pasta raiz gerando nomes únicos quando há conflito, exibe uma barra de progresso durante o processo, registra logs gerais de execução na pasta logs e registra erros de movimentação na pasta error.
+
 import json
 import os
 import shutil
 from pathlib import Path
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT = os.path.dirname(BASE_DIR)
+CONFIG_PATH = os.path.join(REPO_ROOT, "config.json")
+ERROR_DIR = os.path.join(REPO_ROOT, "error")
+LOGS_DIR = os.path.join(REPO_ROOT, "logs")
 
 def carregar_config():
-    with open("config.json", "r", encoding="utf-8") as f:
+    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -31,12 +38,23 @@ def registrar_erro(caminho_log, mensagem):
         log.write(mensagem + "\n")
 
 
+def registrar_log(caminho_log, mensagem):
+    with open(caminho_log, "a", encoding="utf-8") as log:
+        log.write(mensagem + "\n")
+
+
 def separar_videos():
     config = carregar_config()
     secao = config["separador_de_videos"]
 
+    os.makedirs(ERROR_DIR, exist_ok=True)
+    os.makedirs(LOGS_DIR, exist_ok=True)
+
     root_folder = Path(secao["root_folder"])
     error_log = secao["error_log"]
+    error_log_path = os.path.join(ERROR_DIR, error_log)
+    log_path = os.path.join(LOGS_DIR, "log_separador_de_videos.txt")
+
     allowed_image_ext = {ext.lower() for ext in secao["allowed_image_ext"]}
     allowed_video_ext = {ext.lower() for ext in secao["allowed_video_ext"]}
 
@@ -64,6 +82,7 @@ def separar_videos():
         return
 
     print("\nIniciando separação de vídeos e imagens...\n")
+    registrar_log(log_path, "Iniciando separação de vídeos e imagens...")
 
     for indice, arquivo_origem in enumerate(arquivos, start=1):
         progresso = indice / total
@@ -80,9 +99,10 @@ def separar_videos():
             shutil.move(str(arquivo_origem), str(destino))
         except Exception as e:
             mensagem_erro = f"Erro ao mover '{arquivo_origem}': {e}"
-            registrar_erro(error_log, mensagem_erro)
+            registrar_erro(error_log_path, mensagem_erro)
 
     print("\n\nSeparação concluída.")
+    registrar_log(log_path, "Separação concluída.")
 
 
 if __name__ == "__main__":

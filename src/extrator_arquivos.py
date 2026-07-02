@@ -28,7 +28,8 @@ CYAN = Fore.CYAN
 RESET = Style.RESET_ALL
 # Load config
 def load_config():
-    with open('config.json', 'r') as f:
+    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.json')
+    with open(config_path, 'r') as f:
         return json.load(f)
 # Extract functions
 def extract_zip(file_path, extract_to):
@@ -52,7 +53,10 @@ def main():
     config = load_config()
     extrator_config = config.get('extrator_arquivos', {})
     root_folder = extrator_config.get('root_folder', '.')
-    log_file = extrator_config.get('log_file', 'extraction_log.txt')
+    os.makedirs('logs', exist_ok=True)
+    log_file = os.path.join('logs', os.path.basename(extrator_config.get('log_file', 'extraction_log.txt')))
+    os.makedirs('ERROR', exist_ok=True)
+    error_file = os.path.join('ERROR', 'extraction_errors.txt')
     # Find all compressed files
     compressed_extensions = ['.zip', '.rar', '.7z', '.tar', '.gz', '.bz2', '.xz']
     compressed_files = []
@@ -82,7 +86,7 @@ def main():
             else:
                 tqdm.write(f'{ERROR} Tipo não suportado: {file_path}')
                 errors_total += 1
-                with open(log_file, 'a') as log:
+                with open(error_file, 'a') as log:
                     log.write(f'Unsupported type: {file_path}\n')
                 main_pbar.update(1)
                 continue
@@ -120,7 +124,7 @@ def main():
             except Exception as e:
                 tqdm.write(f'{ERROR} Erro ao extrair {file_path}: {str(e)}')
                 errors_total += 1
-                with open(log_file, 'a') as log:
+                with open(error_file, 'a') as log:
                     log.write(f'Error extracting {file_path}: {str(e)}\n')
             # Clean temp
             shutil.rmtree(temp_extract, ignore_errors=True)

@@ -1,3 +1,13 @@
+# Este script carrega o arquivo config.json localizado na raiz do repositório do código.
+# Ele lê a seção organizador_videos_edicao para obter as configurações.
+# Obtém a pasta raiz, a quantidade de vídeos por pasta e as extensões permitidas.
+# Procura vídeos diretamente na pasta raiz configurada.
+# Divide os vídeos em lotes e cria pastas numeradas no formato PARA_EDITAR_N.
+# Dentro de cada pasta criada, gera as subpastas PARA_EDITAR e VIDEOS_FINALIZADOS.
+# Move os vídeos para a subpasta PARA_EDITAR.
+# Grava um arquivo de log na pasta logs com os nomes dos vídeos do lote.
+# Grava erros na pasta ERROR quando ocorre falha ao mover arquivos.
+
 import json
 import os
 import re
@@ -8,17 +18,10 @@ from tqdm import tqdm
 
 def _carregar_configuracao():
     """Carrega o config.json do diretório do script ou do diretório atual."""
-    candidatos = []
-    try:
-        candidatos.append(Path(__file__).resolve().parent / "config.json")
-    except NameError:
-        pass
-    candidatos.append(Path.cwd() / "config.json")
-
-    for caminho in candidatos:
-        if caminho.exists():
-            with open(caminho, "r", encoding="utf-8") as f:
-                return json.load(f)
+    caminho = Path(__file__).resolve().parent.parent / "config.json"
+    if caminho.exists():
+        with open(caminho, "r", encoding="utf-8") as f:
+            return json.load(f)
 
     raise FileNotFoundError("config.json não encontrado")
 
@@ -75,6 +78,12 @@ def run_organizador_videos():
     total_batches = (len(videos) + quantidade_por_pasta - 1) // quantidade_por_pasta
     print(f"{len(videos)} vídeo(s) encontrado(s). Criando {total_batches} pasta(s).")
 
+    pasta_logs = Path("logs")
+    pasta_logs.mkdir(parents=True, exist_ok=True)
+
+    pasta_error = Path("ERROR")
+    pasta_error.mkdir(parents=True, exist_ok=True)
+
     for i in range(0, len(videos), quantidade_por_pasta):
         lote = videos[i : i + quantidade_por_pasta]
         numero = _obter_proximo_numero(pasta_raiz)
@@ -83,7 +92,8 @@ def run_organizador_videos():
         pasta_base = pasta_raiz / nome_pasta
         pasta_para_editar = pasta_base / "PARA_EDITAR"
         pasta_finalizados = pasta_base / "VIDEOS_FINALIZADOS"
-        arquivo_log = pasta_base / f"{nome_pasta}.txt"
+        arquivo_log = pasta_logs / f"{nome_pasta}.txt"
+        arquivo_error = pasta_error / f"{nome_pasta}_erros.txt"
 
         pasta_base.mkdir(parents=True, exist_ok=True)
         pasta_para_editar.mkdir(parents=True, exist_ok=True)
@@ -95,6 +105,8 @@ def run_organizador_videos():
                 shutil.move(str(video), str(destino))
             except Exception as e:
                 print(f"Erro ao mover {video.name}: {e}")
+                with open(arquivo_error, "a", encoding="utf-8") as ef:
+                    ef.write(f"Erro ao mover {video.name}: {e}\n")
 
         with open(arquivo_log, "w", encoding="utf-8") as f:
             f.write("\n".join(Path(video.name).stem for video in lote) + "\n")
