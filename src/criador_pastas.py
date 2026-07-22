@@ -7,6 +7,8 @@
 # e "00 - COM MD", criando-as apenas se ainda nao existirem.
 # Registra informacoes de execucao na pasta logs, por meio de arquivo de log.
 # Em caso de excecao, registra os erros na pasta ERROR, gravando detalhes do ocorrido.
+
+
 import os
 import json
 import logging

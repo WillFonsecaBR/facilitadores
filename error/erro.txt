@@ -1,0 +1,2 @@
+Erro ao mover ._portalvagas2.0_1756857791_3713114477479707116_10419289786.mp4: [Errno 2] No such file or directory: '/Volumes/SSD_1TB/MEMES_BR/00 - FINALIZADOS/gato_daindireta/00 - COM MD/._portalvagas2.0_1756857791_3713114477479707116_10419289786.mp4'
+Erro ao mover ._zoeiraan1mal_1752191292_3673968677725324973_55119071019.mp4: [Errno 2] No such file or directory: '/Volumes/SSD_1TB/MEMES_BR/00 - FINALIZADOS/gato_daindireta/00 - COM MD/._zoeiraan1mal_1752191292_3673968677725324973_55119071019.mp4'

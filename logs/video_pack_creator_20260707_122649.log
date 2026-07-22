@@ -1,0 +1,21 @@
+2026-07-07 12:26:49,726 | INFO | Log file initialized at: /Users/willianfonseca/Projetos/facilitadores/logs/video_pack_creator_20260707_122649.log
+2026-07-07 12:26:49,728 | INFO | Video Pack Creator started.
+2026-07-07 12:26:49,728 | INFO | Configuration loaded from: /Users/willianfonseca/Projetos/facilitadores/config.json
+2026-07-07 12:26:49,728 | INFO | 'criando_packs' configuration validated.
+2026-07-07 12:26:49,730 | INFO | Catalog loaded from: /Users/willianfonseca/Projetos/facilitadores/docs/video_packs_catalog.json
+2026-07-07 12:26:49,730 | INFO | Niche resolved: SATISFACTORY -> Satisfying Videos
+2026-07-07 12:26:50,118 | INFO | Scanned videos: 5409 files across 51 source folders.
+2026-07-07 12:26:50,120 | INFO | Distributed selection complete: 10 packs x 100 videos from 51 source folders.
+2026-07-07 12:26:50,123 | INFO | Master pack folder created: /Volumes/WILLIAN/SATISFACTORY_VIDEOS/00 -FINALIZADO/PACK_MASTER_002
+2026-07-07 12:26:50,237 | INFO | Pack created: PACK_001_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-001-100-1
+2026-07-07 12:26:50,347 | INFO | Pack created: PACK_002_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-002-100-2
+2026-07-07 12:26:50,458 | INFO | Pack created: PACK_003_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-003-100-3
+2026-07-07 12:26:50,572 | INFO | Pack created: PACK_004_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-004-100-4
+2026-07-07 12:26:50,683 | INFO | Pack created: PACK_005_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-005-100-5
+2026-07-07 12:26:50,804 | INFO | Pack created: PACK_006_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-006-100-6
+2026-07-07 12:26:50,935 | INFO | Pack created: PACK_007_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-007-100-7
+2026-07-07 12:26:51,048 | INFO | Pack created: PACK_008_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-008-100-8
+2026-07-07 12:26:51,160 | INFO | Pack created: PACK_009_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-009-100-9
+2026-07-07 12:26:51,275 | INFO | Pack created: PACK_010_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-010-100-10
+2026-07-07 12:26:51,276 | INFO | WooCommerce CSV exported: /Volumes/WILLIAN/SATISFACTORY_VIDEOS/00 -FINALIZADO/PACK_MASTER_002/products_export_20260707_122651.csv (10 rows)
+2026-07-07 12:26:51,276 | INFO | Video Pack Creator finished successfully. Summary: {'status': 'success', 'master_folder': '/Volumes/WILLIAN/SATISFACTORY_VIDEOS/00 -FINALIZADO/PACK_MASTER_002', 'packs_created': 10, 'videos_moved': 1000, 'csv_path': '/Volumes/WILLIAN/SATISFACTORY_VIDEOS/00 -FINALIZADO/PACK_MASTER_002/products_export_20260707_122651.csv', 'niche_code': 'SATISFACTORY'}

@@ -1,0 +1,85 @@
+import os
+import cv2
+
+# ==================== CONFIGURAÇÃO ====================
+# Defina aqui o caminho da pasta que contém os seus vídeos
+DIRETORIO_RAIZ = r"/Volumes/WILLIAN/2_IGREJA/JUNHO - FINALIZADO"
+
+# Defina aqui a quantidade máxima de vídeos que deseja processar
+MAX_VIDEOS = 10
+# ======================================================
+
+def extrair_segundo_frame_de_videos(diretorio, limite_videos):
+    """
+    Varre o diretorio em busca de vídeos, extrai o segundo frame de até 
+    limite_videos e salva os prints em uma pasta 'prints de video' na raiz informada.
+    """
+    # Define o caminho da pasta de destino na raiz do diretório passado
+    pasta_destino = os.path.join(diretorio, "prints de video")
+    
+    # Cria a pasta de destino caso ela não exista
+    if not os.path.exists(pasta_destino):
+        os.makedirs(pasta_destino)
+        print(f"Pasta de destino criada em: '{pasta_destino}'")
+    
+    # Extensões de vídeo mais comuns que o programa irá buscar
+    extensoes_video = ('.mp4', '.avi', '.mkv', '.mov', '.flv', '.wmv', '.webm')
+    
+    videos_processados = 0
+    
+    # os.walk varre a pasta raiz e todas as subpastas recursivamente
+    for root, dirs, files in os.walk(diretorio):
+        # Ignora a própria pasta de destino para evitar loops ou reprocessamento
+        if "prints de video" in root:
+            continue
+            
+        for file in files:
+            # Verifica se o arquivo atual é um vídeo com base na extensão
+            if file.lower().endswith(extensoes_video):
+                caminho_video = os.path.join(root, file)
+                print(f"Processando ({videos_processados + 1}/{limite_videos}): {caminho_video}")
+                
+                # Abre o vídeo usando o OpenCV
+                cap = cv2.VideoCapture(caminho_video)
+                
+                if not cap.isOpened():
+                    print(f"Erro: Não foi possível abrir o vídeo '{file}'.")
+                    continue
+                
+                # Lemos os frames de forma sequencial para garantir compatibilidade
+                # Frame 1 (Índice 0)
+                ret, frame = cap.read()
+                if ret:
+                    # Frame 2 (Índice 1) - O segundo frame que você deseja
+                    ret, frame = cap.read()
+                    if ret:
+                        # Define o nome da imagem de saída baseada no nome do vídeo original
+                        nome_sem_extensao = os.path.splitext(file)[0]
+                        nome_imagem_saida = f"print_{nome_sem_extensao}.jpg"
+                        caminho_saida = os.path.join(pasta_destino, nome_imagem_saida)
+                        
+                        # Salva o frame extraído como imagem JPEG
+                        cv2.imwrite(caminho_saida, frame)
+                        print(f"-> Segundo frame salvo com sucesso em: {caminho_saida}")
+                        videos_processados += 1
+                    else:
+                        print(f"Aviso: O vídeo '{file}' possui menos de 2 frames.")
+                else:
+                    print(f"Erro: Não foi possível ler o primeiro frame de '{file}'.")
+                
+                # Libera o arquivo de vídeo da memória
+                cap.release()
+                
+                # Se atingir o limite configurado, encerra a execução
+                if videos_processados >= limite_videos:
+                    print(f"\nLimite de {limite_videos} vídeos processados atingido com sucesso!")
+                    return
+
+    if videos_processados == 0:
+        print("Nenhum vídeo compatível foi encontrado nas pastas analisadas.")
+    else:
+        print(f"\nProcesso finalizado! Total de prints gerados: {videos_processados}")
+
+# Executa o programa utilizando as variáveis configuradas no topo do código
+if __name__ == "__main__":
+    extrair_segundo_frame_de_videos(DIRETORIO_RAIZ, MAX_VIDEOS)

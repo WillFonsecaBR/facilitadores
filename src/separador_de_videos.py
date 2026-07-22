@@ -1,4 +1,7 @@
-# Este script lê configurações de um config.json na raiz do repositório, varre subpastas dentro de uma pasta raiz configurada procurando arquivos de imagem e vídeo com extensões permitidas, move esses arquivos para a própria pasta raiz gerando nomes únicos quando há conflito, exibe uma barra de progresso durante o processo, registra logs gerais de execução na pasta logs e registra erros de movimentação na pasta error.
+# Este script lê configurações de um config.json na raiz do repositório, varre subpastas dentro de uma 
+# pasta raiz configurada procurando arquivos de imagem e vídeo com extensões permitidas, move esses arquivos 
+# para a própria pasta raiz gerando nomes únicos quando há conflito, exibe uma barra de progresso durante o 
+# processo, registra logs gerais de execução na pasta logs e registra erros de movimentação na pasta error.
 
 import json
 import os
@@ -43,7 +46,7 @@ def registrar_log(caminho_log, mensagem):
         log.write(mensagem + "\n")
 
 
-def separar_videos():
+def run_separar_videos():
     config = carregar_config()
     secao = config["separador_de_videos"]
 
@@ -106,4 +109,4 @@ def separar_videos():
 
 
 if __name__ == "__main__":
-    separar_videos()
+    run_separar_videos()

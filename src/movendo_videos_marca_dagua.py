@@ -1,9 +1,10 @@
+## movendo_videos_marca_dagua.txt
 # ==============================================================================
 # FUNCIONAMENTO DO SCRIPT
 # ------------------------------------------------------------------------------
-# - Lê o arquivo config.json localizado ao lado deste script.
+# - Lê o arquivo config.json localizado na raiz do projeto.
 # - Obtém a pasta raiz por meio da chave movendo_videos_marca_dagua.root_folder.
-# - Define as pastas logs e ERROR ao lado do script para registro de logs e erros.
+# - Define as pastas logs e ERROR na raiz para registro de logs e erros.
 # - Percorre as subpastas de primeiro nível da pasta raiz.
 # - Procura recursivamente, dentro de cada subpasta, por pastas chamadas "00 - COM MD".
 # - Move os vídeos encontrados dessas pastas para uma pasta "00 - COM MD" centralizada
@@ -19,7 +20,8 @@ import shutil
 from pathlib import Path
 from tqdm import tqdm
 
-BASE_DIR = Path(__file__).resolve().parent
+# CORREÇÃO: BASE_DIR agora aponta para a raiz (facilitadores/) subindo dois níveis a partir de src/
+BASE_DIR = Path(__file__).resolve().parent.parent
 LOGS_DIR = BASE_DIR / 'logs'
 ERROR_DIR = BASE_DIR / 'ERROR'
 
@@ -45,26 +47,21 @@ def carregar_configuracao():
     """Carrega as configurações do arquivo config.json."""
     config_path = BASE_DIR / 'config.json'
     if not config_path.exists():
-        raise FileNotFoundError("Arquivo 'config.json' não encontrado.")
-    
+        raise FileNotFoundError(f"Arquivo 'config.json' não encontrado em {BASE_DIR}.")
     with open(config_path, 'r', encoding='utf-8') as f:
         config = json.load(f)
-    
     if 'movendo_videos_marca_dagua' not in config:
         raise KeyError("Chave 'movendo_videos_marca_dagua' não encontrada no config.json.")
-    
     return config['movendo_videos_marca_dagua']
 
 def obter_nome_unico(destino_arquivo):
     """Gera um nome de arquivo único se houver conflito no destino."""
     if not destino_arquivo.exists():
         return destino_arquivo
-    
     nome = destino_arquivo.stem
     ext = destino_arquivo.suffix
     diretorio = destino_arquivo.parent
     contador = 1
-    
     while True:
         novo_nome = f"{nome}_{contador}{ext}"
         novo_destino = diretorio / novo_nome
@@ -77,7 +74,6 @@ def run_movendo_videos_marca_dagua():
     try:
         config = carregar_configuracao()
         root_path = Path(config.get('root_folder', ''))
-
         if not root_path.exists() or not root_path.is_dir():
             print(f"Erro: O diretório raiz '{root_path}' não existe.")
             salvar_erro(f"Erro: O diretório raiz '{root_path}' não existe.")
@@ -86,7 +82,6 @@ def run_movendo_videos_marca_dagua():
         # Pasta principal de destino na raiz
         nome_pasta_md = "00 - COM MD"
         pasta_destino_raiz = root_path / nome_pasta_md
-        
         if not pasta_destino_raiz.exists():
             pasta_destino_raiz.mkdir(parents=True)
 
@@ -107,17 +102,14 @@ def run_movendo_videos_marca_dagua():
                 # Ignorar a pasta de destino principal se ela for encontrada por algum motivo
                 if pasta_alvo.resolve() == pasta_destino_raiz.resolve():
                     continue
-
+                
                 # Listar vídeos DIRETAMENTE dentro desta pasta
                 arquivos_na_pasta = [f for f in pasta_alvo.iterdir() if f.is_file() and f.suffix.lower() in extensoes_video]
-                
                 if arquivos_na_pasta:
                     # O destino final é root/00 - COM MD/NOME_DA_PASTA_TOPO/
                     diretorio_final_agrupado = pasta_destino_raiz / pasta_topo.name
-                    
                     for video in arquivos_na_pasta:
                         tarefas_movimentacao.append((video, diretorio_final_agrupado))
-                    
                     pastas_para_limpar.add(pasta_alvo)
 
         if not tarefas_movimentacao:
@@ -127,23 +119,19 @@ def run_movendo_videos_marca_dagua():
 
         # FASE 2: Movimentação com barra de progresso
         videos_movidos = 0
-        
         with tqdm(total=len(tarefas_movimentacao), desc="Organizando mídias", unit="arquivo", 
                   bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]") as pbar:
-            
             for origem, dir_destino in tarefas_movimentacao:
                 if not dir_destino.exists():
                     dir_destino.mkdir(parents=True, exist_ok=True)
                 
                 destino_final = obter_nome_unico(dir_destino / origem.name)
-                
                 try:
                     shutil.move(str(origem), str(destino_final))
                     videos_movidos += 1
                 except Exception as e:
                     print(f"\nErro ao mover {origem.name}: {e}")
                     salvar_erro(f"Erro ao mover {origem.name}: {e}")
-                
                 pbar.update(1)
 
         # FASE 3: Limpeza de pastas vazias

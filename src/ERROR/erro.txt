@@ -1,0 +1,3 @@
+Erro inesperado: "Chave 'movendo_videos_marca_dagua' não encontrada no config.json."
+Erro inesperado: "Chave 'movendo_videos_marca_dagua' não encontrada no config.json."
+Erro inesperado: Arquivo 'config.json' não encontrado.

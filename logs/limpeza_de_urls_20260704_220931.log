@@ -1,0 +1,15 @@
+2026-07-04 22:09:31,973 - INFO - === Iniciando Limpeza de URLs ===
+2026-07-04 22:09:31,974 - INFO - Arquivo para limpar localizado: MEMES_BR.yaml
+2026-07-04 22:09:31,974 - INFO - Iniciando processamento do arquivo: MEMES_BR.yaml
+2026-07-04 22:09:31,974 - INFO - Correspondências encontradas: ['TIKTOK', 'INSTAGRAM', 'YOUTUBE']
+2026-07-04 22:09:31,975 - INFO - Total de URLs extraídas: 5
+2026-07-04 22:09:31,976 - INFO - Total de URLs após limpeza: 5
+2026-07-04 22:09:31,976 - INFO - URLs duplicadas removidas: 0
+2026-07-04 22:09:31,976 - INFO - URLs únicas: 5
+2026-07-04 22:09:31,977 - INFO - Arquivo de comparação gerado: database_links/para_limpar/comparacao_TIKTOK.yaml
+2026-07-04 22:09:31,979 - INFO - Emojis misturados detectados no database de INSTAGRAM. Reorganizando em memória (sem alterar o arquivo original).
+2026-07-04 22:09:31,980 - INFO - Arquivo de comparação gerado: database_links/para_limpar/comparacao_INSTAGRAM.yaml
+2026-07-04 22:09:31,982 - INFO - Arquivo de comparação gerado: database_links/para_limpar/comparacao_YOUTUBE.yaml
+2026-07-04 22:09:31,983 - INFO - URLs puras (sem texto antes): 5
+2026-07-04 22:09:31,983 - INFO - URLs com texto antes: 0
+2026-07-04 22:09:31,983 - INFO - Processamento concluído com sucesso.

@@ -1,0 +1,61 @@
+2026-07-07 12:25:14,171 | INFO | Log file initialized at: /Users/willianfonseca/Projetos/facilitadores/logs/video_pack_creator_20260707_122514.log
+2026-07-07 12:25:14,172 | INFO | Video Pack Creator started.
+2026-07-07 12:25:14,173 | INFO | Configuration loaded from: /Users/willianfonseca/Projetos/facilitadores/config.json
+2026-07-07 12:25:14,173 | INFO | 'criando_packs' configuration validated.
+2026-07-07 12:25:14,175 | INFO | Catalog loaded from: /Users/willianfonseca/Projetos/facilitadores/docs/video_packs_catalog.json
+2026-07-07 12:25:14,175 | INFO | Niche resolved: SATISFACTORY -> Satisfying Videos
+2026-07-07 12:25:14,509 | INFO | Scanned videos: 5409 files across 1 source folders.
+2026-07-07 12:25:14,511 | INFO | Distributed selection complete: 50 packs x 100 videos from 1 source folders.
+2026-07-07 12:25:14,569 | INFO | Master pack folder created: /Volumes/WILLIAN/SATISFACTORY_VIDEOS/00 -FINALIZADO/PACK_MASTER_001
+2026-07-07 12:25:14,705 | INFO | Pack created: PACK_001_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-001-100-1
+2026-07-07 12:25:14,819 | INFO | Pack created: PACK_002_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-002-100-2
+2026-07-07 12:25:14,929 | INFO | Pack created: PACK_003_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-003-100-3
+2026-07-07 12:25:15,045 | INFO | Pack created: PACK_004_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-004-100-4
+2026-07-07 12:25:15,165 | INFO | Pack created: PACK_005_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-005-100-5
+2026-07-07 12:25:15,282 | INFO | Pack created: PACK_006_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-006-100-6
+2026-07-07 12:25:15,402 | INFO | Pack created: PACK_007_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-007-100-7
+2026-07-07 12:25:15,517 | INFO | Pack created: PACK_008_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-008-100-8
+2026-07-07 12:25:15,627 | INFO | Pack created: PACK_009_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-009-100-9
+2026-07-07 12:25:15,739 | INFO | Pack created: PACK_010_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-010-100-10
+2026-07-07 12:25:15,849 | INFO | Pack created: PACK_011_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-011-100-11
+2026-07-07 12:25:15,959 | INFO | Pack created: PACK_012_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-012-100-12
+2026-07-07 12:25:16,072 | INFO | Pack created: PACK_013_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-013-100-13
+2026-07-07 12:25:16,182 | INFO | Pack created: PACK_014_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-014-100-14
+2026-07-07 12:25:16,293 | INFO | Pack created: PACK_015_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-015-100-15
+2026-07-07 12:25:16,406 | INFO | Pack created: PACK_016_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-016-100-16
+2026-07-07 12:25:16,563 | INFO | Pack created: PACK_017_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-017-100-17
+2026-07-07 12:25:16,676 | INFO | Pack created: PACK_018_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-018-100-18
+2026-07-07 12:25:16,788 | INFO | Pack created: PACK_019_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-019-100-19
+2026-07-07 12:25:16,896 | INFO | Pack created: PACK_020_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-020-100-20
+2026-07-07 12:25:17,006 | INFO | Pack created: PACK_021_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-021-100-21
+2026-07-07 12:25:17,118 | INFO | Pack created: PACK_022_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-022-100-22
+2026-07-07 12:25:17,229 | INFO | Pack created: PACK_023_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-023-100-23
+2026-07-07 12:25:17,340 | INFO | Pack created: PACK_024_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-024-100-24
+2026-07-07 12:25:17,452 | INFO | Pack created: PACK_025_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-025-100-25
+2026-07-07 12:25:17,561 | INFO | Pack created: PACK_026_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-026-100-26
+2026-07-07 12:25:17,671 | INFO | Pack created: PACK_027_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-027-100-27
+2026-07-07 12:25:17,784 | INFO | Pack created: PACK_028_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-028-100-28
+2026-07-07 12:25:17,895 | INFO | Pack created: PACK_029_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-029-100-29
+2026-07-07 12:25:18,005 | INFO | Pack created: PACK_030_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-030-100-30
+2026-07-07 12:25:18,120 | INFO | Pack created: PACK_031_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-031-100-31
+2026-07-07 12:25:18,235 | INFO | Pack created: PACK_032_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-032-100-32
+2026-07-07 12:25:18,346 | INFO | Pack created: PACK_033_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-033-100-33
+2026-07-07 12:25:18,478 | INFO | Pack created: PACK_034_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-034-100-34
+2026-07-07 12:25:18,595 | INFO | Pack created: PACK_035_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-035-100-35
+2026-07-07 12:25:18,705 | INFO | Pack created: PACK_036_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-036-100-36
+2026-07-07 12:25:18,817 | INFO | Pack created: PACK_037_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-037-100-37
+2026-07-07 12:25:18,927 | INFO | Pack created: PACK_038_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-038-100-38
+2026-07-07 12:25:19,037 | INFO | Pack created: PACK_039_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-039-100-39
+2026-07-07 12:25:19,151 | INFO | Pack created: PACK_040_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-040-100-40
+2026-07-07 12:25:19,260 | INFO | Pack created: PACK_041_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-041-100-41
+2026-07-07 12:25:19,370 | INFO | Pack created: PACK_042_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-042-100-42
+2026-07-07 12:25:19,483 | INFO | Pack created: PACK_043_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-043-100-43
+2026-07-07 12:25:19,609 | INFO | Pack created: PACK_044_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-044-100-44
+2026-07-07 12:25:19,721 | INFO | Pack created: PACK_045_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-045-100-45
+2026-07-07 12:25:19,833 | INFO | Pack created: PACK_046_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-046-100-46
+2026-07-07 12:25:19,945 | INFO | Pack created: PACK_047_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-047-100-47
+2026-07-07 12:25:20,055 | INFO | Pack created: PACK_048_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-048-100-48
+2026-07-07 12:25:20,167 | INFO | Pack created: PACK_049_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-049-100-49
+2026-07-07 12:25:20,277 | INFO | Pack created: PACK_050_SATISFACTORY | videos moved: 100 | sku: SATISFACTORY-050-100-50
+2026-07-07 12:25:20,278 | INFO | WooCommerce CSV exported: /Volumes/WILLIAN/SATISFACTORY_VIDEOS/00 -FINALIZADO/PACK_MASTER_001/products_export_20260707_122520.csv (50 rows)
+2026-07-07 12:25:20,278 | INFO | Video Pack Creator finished successfully. Summary: {'status': 'success', 'master_folder': '/Volumes/WILLIAN/SATISFACTORY_VIDEOS/00 -FINALIZADO/PACK_MASTER_001', 'packs_created': 50, 'videos_moved': 5000, 'csv_path': '/Volumes/WILLIAN/SATISFACTORY_VIDEOS/00 -FINALIZADO/PACK_MASTER_001/products_export_20260707_122520.csv', 'niche_code': 'SATISFACTORY'}

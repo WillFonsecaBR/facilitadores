@@ -1,3 +1,4 @@
+## organizador.txt
 # Este script organiza arquivos de midia (imagens e videos) localizados em uma pasta raiz configurada.
 # Ele le as configuracoes a partir do arquivo config.json, como a pasta raiz, extensoes permitidas e o arquivo de log de erros.
 # Apos carregar as configuracoes, percorre recursivamente a pasta raiz informada, identificando imagens e videos validos com base nas extensoes permitidas.
@@ -15,8 +16,7 @@ import json
 from pathlib import Path
 import hashlib
 from datetime import datetime
-
-from PIL import Image
+# from PIL import Image
 from tqdm import tqdm
 
 try:
@@ -24,15 +24,13 @@ try:
 except ImportError:
     cv2 = None
 
-
-BASE_DIR = Path(__file__).resolve().parent
+# CORREÇÃO: BASE_DIR agora aponta para a raiz (facilitadores/) subindo um nível a partir de src/
+BASE_DIR = Path(__file__).resolve().parent.parent
 CONFIG_FILE = BASE_DIR / "config.json"
 APP_SECTION = "organizador_midias"
 
-
 def carregar_config():
     caminho_config = Path(CONFIG_FILE)
-
     if not caminho_config.exists():
         default_config = {
             APP_SECTION: {
@@ -42,23 +40,18 @@ def carregar_config():
                 "allowed_video_ext": [".mp4", ".avi", ".mov", ".mkv", ".wmv", ".flv", ".webm", ".mpeg", ".mpg"]
             }
         }
-
         with open(caminho_config, "w", encoding="utf-8") as f:
             json.dump(default_config, f, indent=4, ensure_ascii=False)
-
         print(f"Arquivo {CONFIG_FILE} criado. Ajuste os caminhos e execute novamente.")
         return None
-
     with open(caminho_config, "r", encoding="utf-8") as f:
         return json.load(f)
 
-
 def normalizar_texto(texto):
-    invalidos = r'<>:"/\\|?*'
+    invalidos = r'<>:"/\|?*'
     for ch in invalidos:
         texto = texto.replace(ch, "_")
     return texto.strip().replace(" ", "_").upper()
-
 
 def eh_arquivo_auxiliar_mac(path_obj):
     nome = path_obj.name
@@ -68,17 +61,14 @@ def eh_arquivo_auxiliar_mac(path_obj):
         nome.startswith(".")
     )
 
-
 def eh_arquivo_media(caminho_arquivo, config_app):
     if eh_arquivo_auxiliar_mac(caminho_arquivo):
         return False
-
     extensao = caminho_arquivo.suffix.lower()
     return (
         extensao in config_app["allowed_image_ext"] or
         extensao in config_app["allowed_video_ext"]
     )
-
 
 def coletar_arquivos_midias(root_folder, config_app):
     arquivos = []
@@ -87,7 +77,6 @@ def coletar_arquivos_midias(root_folder, config_app):
             arquivos.append(caminho_arquivo)
     return arquivos
 
-
 def obter_resolucao_imagem(caminho_arquivo):
     try:
         with Image.open(caminho_arquivo) as img:
@@ -95,28 +84,22 @@ def obter_resolucao_imagem(caminho_arquivo):
     except Exception:
         return "IMAGE_UNKNOWN"
 
-
 def obter_resolucao_video(caminho_arquivo):
     try:
         if cv2 is None:
             return "VIDEO_UNKNOWN"
-
         cap = cv2.VideoCapture(str(caminho_arquivo))
         if not cap.isOpened():
             cap.release()
             return "VIDEO_UNKNOWN"
-
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         cap.release()
-
         if width > 0 and height > 0:
             return f"{width}x{height}".upper()
-
         return "VIDEO_UNKNOWN"
     except Exception:
         return "VIDEO_UNKNOWN"
-
 
 def calcular_hash(caminho_arquivo):
     try:
@@ -128,7 +111,6 @@ def calcular_hash(caminho_arquivo):
     except Exception:
         return "HASHERROR000000"
 
-
 def obter_data(caminho_arquivo):
     try:
         timestamp = caminho_arquivo.stat().st_mtime
@@ -136,28 +118,22 @@ def obter_data(caminho_arquivo):
     except Exception:
         return datetime.now().strftime("%Y%m%d")
 
-
 def obter_categoria_subcategoria(caminho_arquivo, root_folder):
     categoria = root_folder.name.upper()
     rel = caminho_arquivo.relative_to(root_folder)
-
     if len(rel.parts) > 1:
         subcategoria = rel.parts[0].upper()
     else:
         subcategoria = categoria
-
     return categoria, subcategoria
-
 
 def gerar_nome_base(categoria, subcategoria, resolucao, data, numero, hash_str):
     return f"{categoria}_{subcategoria}_{resolucao}_{data}_{numero}_{hash_str}"
-
 
 def resolver_duplicado(pasta_destino, nome_base, extensao):
     candidato = pasta_destino / f"{nome_base}{extensao}"
     if not candidato.exists():
         return candidato
-
     contador = 1
     while True:
         nome_dup = f"{nome_base}_DUP{contador:03d}{extensao}"
@@ -166,7 +142,6 @@ def resolver_duplicado(pasta_destino, nome_base, extensao):
             return candidato
         contador += 1
 
-
 def registrar_erro(caminho_log, caminho_arquivo, mensagem):
     caminho_log = Path(caminho_log)
     caminho_log.parent.mkdir(parents=True, exist_ok=True)
@@ -174,80 +149,65 @@ def registrar_erro(caminho_log, caminho_arquivo, mensagem):
     with open(caminho_log, "a", encoding="utf-8") as f:
         f.write(f"[{timestamp}] {caminho_arquivo} -> {mensagem}\n")
 
-
 def registrar_log(mensagem):
+    # Logs agora serão criados em facilitadores/logs/
     caminho_log = BASE_DIR / "logs" / "app.log"
     caminho_log.parent.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(caminho_log, "a", encoding="utf-8") as f:
         f.write(f"[{timestamp}] {mensagem}\n")
 
-
 def renomear_no_mesmo_local(caminho_origem, caminho_destino):
     caminho_destino.parent.mkdir(parents=True, exist_ok=True)
     caminho_origem.rename(caminho_destino)
 
-
 def processar_arquivo(caminho_arquivo, config_app, numero, total_arquivos):
     root_folder = Path(config_app["root_folder"])
-
     categoria, subcategoria = obter_categoria_subcategoria(caminho_arquivo, root_folder)
     data = obter_data(caminho_arquivo)
     hash_str = calcular_hash(caminho_arquivo)
     extensao = caminho_arquivo.suffix.lower()
-
     if extensao in config_app["allowed_image_ext"]:
         resolucao = obter_resolucao_imagem(caminho_arquivo)
     elif extensao in config_app["allowed_video_ext"]:
         resolucao = obter_resolucao_video(caminho_arquivo)
     else:
         resolucao = "UNKNOWN"
-
     numero_str = str(numero).zfill(len(str(total_arquivos)))
     nome_base = gerar_nome_base(categoria, subcategoria, resolucao, data, numero_str, hash_str)
-
     pasta_destino = caminho_arquivo.parent
     caminho_final = resolver_duplicado(pasta_destino, nome_base, extensao)
-
     renomear_no_mesmo_local(caminho_arquivo, caminho_final)
-
 
 def run_organizador():
     config = carregar_config()
     if not config:
         return
-
     config_app = config.get(APP_SECTION, {})
-
     root_folder = config_app.get("root_folder")
     error_log = config_app.get("error_log", "erros.log")
+    
+    # Erros agora serão registrados em facilitadores/ERROR/
     error_log = BASE_DIR / "ERROR" / Path(error_log).name
-
+    
     if not root_folder:
         print(f"O campo 'root_folder' não foi definido em '{APP_SECTION}'.")
         return
-
     root_path = Path(root_folder).expanduser()
-
     if not root_path.exists() or not root_path.is_dir():
         print(f"ERRO: a pasta raiz não existe ou não é válida: {root_folder}")
         return
-
     arquivos = coletar_arquivos_midias(root_path, config_app)
     total_arquivos = len(arquivos)
-
     if total_arquivos == 0:
         print("Nenhum arquivo de imagem ou vídeo encontrado.")
         return
-
     print(f"Total de arquivos encontrados: {total_arquivos}")
     print(f"Pasta raiz: {root_path}")
     print("Iniciando processamento...\n")
-
     registrar_log(f"Total de arquivos encontrados: {total_arquivos}")
     registrar_log(f"Pasta raiz: {root_path}")
     registrar_log("Iniciando processamento...")
-
     for numero, caminho_arquivo in enumerate(
         tqdm(arquivos, total=total_arquivos, desc="Organizando mídias", unit="arquivo"),
         start=1
@@ -258,6 +218,8 @@ def run_organizador():
             registrar_erro(error_log, caminho_arquivo, str(e))
             print(f"\nErro ao processar {caminho_arquivo}: {e}")
             registrar_log(f"Erro ao processar {caminho_arquivo}: {e}")
-
     print("\nConcluído com sucesso.")
     registrar_log("Concluído com sucesso.")
+
+if __name__ == "__main__":
+    run_organizador()

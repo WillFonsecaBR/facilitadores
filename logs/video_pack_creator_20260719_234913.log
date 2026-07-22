@@ -1,0 +1,12 @@
+2026-07-19 23:49:13,977 | INFO | Video Pack Creator started.
+2026-07-19 23:49:13,977 | INFO | Project root: /Users/willianfonseca/Projetos/facilitadores
+2026-07-19 23:49:13,977 | INFO | Configuration file: /Users/willianfonseca/Projetos/facilitadores/config.json
+2026-07-19 23:49:14,642 | INFO | Compatible videos found: 69427
+2026-07-20 03:10:00,480 | INFO | Videos selected: 3000
+2026-07-20 03:10:10,952 | INFO | Moved 1000 videos to 'Memes Pack 1'.
+2026-07-20 03:10:11,416 | INFO | Prints generated for 'Memes Pack 1': 30
+2026-07-20 03:10:21,138 | INFO | Moved 1000 videos to 'Memes Pack 2'.
+2026-07-20 03:10:21,533 | INFO | Prints generated for 'Memes Pack 2': 30
+2026-07-20 03:10:31,225 | INFO | Moved 1000 videos to 'Memes Pack 3'.
+2026-07-20 03:10:31,799 | INFO | Prints generated for 'Memes Pack 3': 30
+2026-07-20 03:10:31,805 | INFO | Video pack creation completed successfully.

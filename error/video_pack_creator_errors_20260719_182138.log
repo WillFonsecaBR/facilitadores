@@ -1,0 +1,13 @@
+
+================================================================================
+Timestamp: 2026-07-19T18:21:38.098071
+Message: Video pack creation failed.
+Exception: 'tipo_do_pack' must be DIAMOND, GOLD, SILVER, or BRONZE.
+Traceback:
+Traceback (most recent call last):
+  File "/Users/willianfonseca/Projetos/facilitadores/src/video_pack_creator.py", line 1233, in run_video_pack_creator
+    lines = [
+  File "/Users/willianfonseca/Projetos/facilitadores/src/video_pack_creator.py", line 305, in load_pack_settings
+    "BRONZE",
+ValueError: 'tipo_do_pack' must be DIAMOND, GOLD, SILVER, or BRONZE.
+

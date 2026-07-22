@@ -5,3 +5,6 @@ opencv-python
 rarfile
 py7zr
 colorama
+PyYAML
+OpenCV
+CustomTkinter
