@@ -1,0 +1,11 @@
+renomeador
+movimentar
+extrair
+copiador_produtos
+criador_packs
+compactador_packs
+organizador_conferencia
+renomeador_packs
+limpador
+exclusao_massiva
+transferidor

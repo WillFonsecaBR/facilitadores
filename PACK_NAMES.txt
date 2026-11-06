@@ -1,0 +1,69 @@
+MEMES: Meme Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+SATISFACTORY: Satisfying Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+RANDOM: Random Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+VIRAL: Viral Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+CARS: Car Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+STREET_FOOD: Street Food Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+FIGHTS: Fight Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+FISHING: Fishing Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+ANIMALS: Animal Video Pack - #{NUMERO} - {QTD_VIDEOS} Clips
+ANIMALS: Pet Video Pack - #{NUMERO} - {QTD_VIDEOS} Clips
+ANIMALS: Wild Animals Video Pack - #{NUMERO} - {QTD_VIDEOS} Clips
+AI: AI Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+VIRAL: Viral Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+MUSIC: Music Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+ENGLISH_LEARN: English Learning Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+WORKS: Construction Work Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+GYM: Gym Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+ANATOMY: Anatomy Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+WEAPONS: Weapons Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+TIES: Knot Tying Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+FOOD: Food Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+PRETTY_GIRLS: Pretty Girls Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+FUTEBOL: Soccer Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+STONES: Stone Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+MOTIVATION: Motivational Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+FRUITS: Fruit Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+SEXY: Sexy Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+GORE: Gore Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+CHIROPRACTIC: Chiropractic Adjustment Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+DANCE: Dance Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+COPS: Police Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+FUNNY: Funny Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+RELATIONSHIP_MEMES: Relationship Meme Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+QUOTES: Inspirational Quotes Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+CURIOSITY: Curiosity Facts Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+DIY: DIY Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+HANDICRAFT: Handmade Craft Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+GARDENING: Gardening Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+CARPET_CLEANING: Carpet Cleaning Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+PRESSING_THINGS: Crushing & Pressing Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+SOAP: Soap Cutting Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+SURVIVAL_TIPS: Survival Tips Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+GLASS_CLEANING: Glass Cleaning Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+PRODUCTS: Product Demo Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+FRIGHTS: Jump Scare Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+MONEY: Money Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+LUST: Seductive Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+BABIES: Baby Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+MOVIES: Movie Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+COUPLES: Couple Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+COUPLES: Products Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+GAMES: Gaming Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+BEAUTIFUL: Aesthetic Beauty Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+TRAPS: Trap Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+HUNTER: Hunting Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+ARTS: Art Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+STORIES: Storytelling Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+SCARY: Scary Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+PODOLOGY: Foot Care Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+SPORTS: Sports Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+MACHINES: Machine Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+BEAUTIFUL_HOUSES: Luxury Home Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+ANIME: Anime Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+HEALTH: Health Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+GOSPEL: Gospel Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
+MEMES_BR: Pack de Memes BR #{NUMERO} - {QTD_VIDEOS} Vídeos
+FILMES:  Pack de Filmes BR #{NUMERO} - {QTD_VIDEOS} Vídeos
+FILMES:  Pack de Filmes #{NUMERO} - {QTD_VIDEOS} Vídeos
+LIFESTYLE: Lifestyle Video Pack #{NUMERO} - {QTD_VIDEOS} Clips
